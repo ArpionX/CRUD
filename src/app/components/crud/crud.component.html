@@ -1,0 +1,55 @@
+
+
+<form [formGroup]="formularioEstudiante" (submit)="agregarEstudiante()" class="formulario" >
+  <label for="name">Nombre Estudiante</label>
+  <input type="text" id="name" formControlName="nombre" >
+  <label for="email">Email Estudiante</label>
+  <input type="email" id="email" formControlName="email" >
+  <label for="materia">Materia Estudiante</label>
+  <input type="text" id="materia" formControlName="materia" >
+  <button type="submit" [disabled]="!formularioEstudiante.valid"> enviar</button>
+</form>
+
+<form [formGroup]="formularioUpdateEstudiante" (submit)="editarEstudiante(editar.valueAsNumber)" class="formulario">
+  <span>Editar Estudiante</span>
+  <label for="name">Nombre Estudiante</label>
+  <input type="text" id="name" formControlName="nombre" >
+  <label for="email">Email Estudiante</label>
+  <input type="email" id="email" formControlName="email" >
+  <label for="materia">Materia Estudiante</label>
+  <input type="text" id="materia" formControlName="materia" >
+  <label for="numero">numero de estudiante</label>
+  <input type="number" id="numero" placeholder="estudiante a editar" formControlName="id" #editar>
+  <button type="submit" [disabled]="!formularioUpdateEstudiante.valid"> enviar</button>
+</form>
+<input type="number" placeholder="estudiante a borrar" #borrar>
+<button (click)="eliminarEstudianteEspecial(borrar.valueAsNumber)">
+  eliminar estudiante
+</button>
+
+<button (click)="actualizar()">Actualizar Lista</button>
+<input type="text" placeholder="filtrar" #filtrar (keyup)="filterResult(filtrar.value)">
+<button type="button" (click)="filterResult(filtrar.value)">filtrar lista</button>
+<section >
+  <table class="table">
+    <thead>
+      <th scope="col">ID</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Email</th>
+      <th scope="col">Materia</th>
+    </thead>
+    <tbody>
+      @for (persona of filteredPersonaList; track $index) {
+        <tr class="table-row">
+          <th scope="row">{{ persona.id }}</th>
+          <td>{{ persona.nombre }}</td>
+          <td>{{ persona.email }}</td>
+          <td>{{ persona.materia }}</td>
+        </tr>
+      }@empty {
+        <tr aria-hidden="true"> There are no items. </tr>
+      }
+    </tbody>
+  </table>
+
+</section>
