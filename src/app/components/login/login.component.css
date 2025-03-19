@@ -1,0 +1,8 @@
+
+
+@media (min-width: 768px) {
+  .box-shadow {
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+  }
+
+}

@@ -1,0 +1,60 @@
+<div class="flex justify-between items-center p-1">
+  <div class="flex flex-col items-center">
+    @if(equipoFoto){
+      <img src="{{equipoFoto}}" alt="foto del equipo" class="h-[100px] w-[100px]  lg:ml-15 ">
+    }@else {
+      <img src="assets/imagenesEquipos/escudo.png" alt="foto del equipo" class="h-[100px] w-[100px]  lg:ml-15 ">
+    }
+
+    <h1 class="font-semibold lg:ml-15 ">Jugadores de {{equipoNombre}}</h1>
+    <p class="lg:ml-15 font-light py-2">A list of all the players in their temas. Their Nombre, número de camiseta, posición, equipo, valoracion, and foto.</p>
+  </div>
+
+</div>
+<div class="lg:ml-15 lg:mr-25 mt-10 overflow-hidden rounded-lg border border-gray-300 shadow-lg">
+  <table class="w-full border-collapse fondo-header">
+    <thead class="h-12">
+      <tr>
+        <th class="font-semibold lg:px-6 py-3">Id</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Nombre</th>
+        <th class="hidden lg:table-cell font-semibold lg:px-6 py-3 text-left">Número</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Posición</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Foto</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(jugador of jugadoresListFilter; track $index) {
+      <tr class=" bg-white border-gray-200 hover:bg-gray-200 h-5">
+        <th class="lg:px-6 py-1.5 text-gray-700 font-semibold" scope="row">{{ jugador.id }}</th>
+        <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.nombre }}</td>
+        <td class="hidden lg:table-cell lg:px-6 py-1.5 text-gray-500">{{ jugador.numeroCamisa }}</td>
+        <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.posicion }}</td>
+        <td class="lg:px-6 py-1.5">
+          <img src="{{jugador.fotoJugador}}" class="h-[50px] w-[60px]"  alt="{{jugador.nombre}}">
+        </td>
+
+
+      </tr>
+    }
+      @empty {
+        @for(jugador of jugadoresListData; track $index) {
+          <tr class=" bg-white border-gray-200 hover:bg-gray-200 h-5">
+            <th class="lg:px-6 py-1.5 text-gray-700 font-semibold" scope="row">{{ jugador.id }}</th>
+            <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.nombre }}</td>
+            <td class="hidden lg:table-cell lg:px-6 py-1.5 text-gray-500">{{ jugador.numeroCamisa }}</td>
+            <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.posicion }}</td>
+            <td class="lg:px-6 py-1.5">
+              <img src="{{jugador.fotoJugador}}" class="h-[50px] w-[60px]"  alt="{{jugador.nombre}}">
+            </td>
+
+
+          </tr>
+        }
+        <tr>
+          <td colspan="4" class="text-center py-1.5 text-gray-500">Modo Vista.</td>
+        </tr>
+      }
+
+    </tbody>
+  </table>
+</div>

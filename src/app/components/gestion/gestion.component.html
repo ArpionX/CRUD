@@ -1,0 +1,307 @@
+<div class="flex justify-between items-center p-1">
+  <div class="flex flex-col">
+    <h1 class="font-semibold lg:ml-15 mt-10">Partidos</h1>
+    <p class=" lg:ml-15 font-light py-2">A list of all the Partidos in your account including their fecha, hora, equipo local and equipo visitante y resultado.</p>
+  </div>
+  <button type="button" class="lg:mr-30 mt-10 bg-indigo-600 text-white rounded-xl p-2 valido " (click)="toggleMenu()">Add Partido</button>
+</div>
+
+<!----------------------------MENU Agregar Partido------------------------------------------------>
+<div [class.aparecer]="isMenuOpen" [class.desaparecer]="!isMenuOpen && hasMenuOpened" class=" w-[330px] lg:w-[826px] lg:ml-15 items-center bg-white rounded-2xl border-gray-200 border-1 hidden overflow-hidden ">
+  <!----------------------------FORMULARIO------------------------------------------------>
+  <form [formGroup]="formularioPartidos" (submit)="agregarPartido()" class="flex flex-col p-3">
+
+
+    <!------------------FECHA--------------------------------------------->
+    <div class="flex flex-col lg:flex-row lg:flex-wrap lg:gap-4">
+      <div class="grow flex flex-col lg:w-[350px]">
+        <label class="font-semibold lg:pt-5" for="fecha">Fecha</label>
+        <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="date" id="fecha" formControlName="fecha" placeholder="fecha de equipo">
+      </div>
+      <!-----------------HORA--------------------------------------------->
+      <div class="grow flex flex-col lg:w-[350px]">
+        <label class="font-semibold lg:pt-5" for="hora">Hora</label>
+        <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="time" id="hora" formControlName="hora" placeholder="hora de equipo">
+      </div>
+      <!-----------------ID LOCAL--------------------------------------------->
+
+      <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+        <label class="font-medium pt-5" for="equipoLocalId">Equipo Local</label>
+        <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoLocalId" formControlName="equipoLocalId">
+          @for (equipo of equiposList; track $index) {
+            <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+          }
+        </select>
+      </div>
+
+      <!-----------------ID VISITANTE--------------------------------------------->
+
+      <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+        <label class="font-medium pt-5 " for="equipoVisitanteId">Equipo Visitante</label>
+        <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoVisitanteId" formControlName="equipoVisitanteId">
+          @for (equipo of equiposList; track $index) {
+            <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+
+    <!-----------------------BOTON SUBMIT--------------------------------->
+    <div class="flex gap-3">
+      <button [class.valido]="formularioPartidos.valid" class=" w-52 my-5 bg-indigo-400 text-white rounded-xl  p-2 px-10" type="submit" [disabled]="!formularioPartidos.valid">Aceptar</button>
+      <button class="w-52 my-5 bg-gray-400 text-white rounded-xl p-2 px-10 cursor-pointer" type="button" (click)="toggleMenu()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-----------------------------MENU Editar Partido-------------------------------------------->
+@if (menuFlotante) {
+  <div [class.fondoNegro]="menuFlotante" class="flex relative justify-center p-1" (click)="cerrarMenu()">
+    <div class="lg:w-[826px] lg:ml-15 items-center bg-white rounded-2xl border-gray-200 border-1 overflow-hidden z-50 h-fit my-auto flex flex-col modal p-1" (click)="$event.stopPropagation()">
+      <form [formGroup]="formularioUpdatePartidos" (submit)="editar(idPartidoSeleccionado!)" class="flex flex-col lg:p-3 sm:w-sm w-[300px] lg:w-auto">
+        <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+          <label class="font-medium pt-5 " for="Id PArtido">ID PArtido</label>
+          <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="number" id="ID PArtido" placeholder="{{idPartidoSeleccionado}}" disabled >
+        </div>
+        <!------------------fecha Y --------------------------------------------->
+        <div class="flex flex-wrap lg:gap-3">
+          <div class="grow flex flex-col lg:w-[350px] w-[200px]">
+            <label class="font-semibold pt-5" for="fecha">fecha</label>
+            <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="date" id="fecha" formControlName="fecha" placeholder="fecha de Partido">
+          </div>
+          <!----------------hora------------------------------------------------->
+          <div class="grow flex flex-col lg:w-[350px] w-[200px]">
+            <label class="font-semibold pt-5" for="hora">hora</label>
+            <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="time" id="hora" formControlName="hora" placeholder="hora de Partido">
+          </div>
+        </div>
+
+        <!-----------------ID LOCAL--------------------------------------------->
+
+        <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+          <label class="font-medium pt-5" for="equipoLocalId">Equipo Local</label>
+          <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoLocalId" formControlName="equipoLocalId">
+            @for (equipo of equiposList; track $index) {
+              <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+            }
+          </select>
+        </div>
+      <!-----------------ID VISITANTE--------------------------------------------->
+
+      <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+        <label class="font-medium pt-5 " for="equipoVisitanteId">EquipoVisitanteID</label>
+        <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoVisitanteId" formControlName="equipoVisitanteId">
+          @for (equipo of equiposList; track $index) {
+            <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+          }
+        </select>
+      </div>
+        <!-----------------------BOTON SUBMIT--------------------------------->
+
+        <div class="flex gap-3">
+          <button [class.valido]="formularioUpdatePartidos.valid" class=" lg:w-52 my-5 bg-indigo-400 text-white rounded-xl  p-2 px-10" type="submit" [disabled]="!formularioUpdatePartidos.valid">Aceptar</button>
+          <button class="lg:w-52 my-5 bg-gray-400 text-white rounded-xl p-2 px-10 cursor-pointer" type="button" (click)="cerrarMenu()">
+            Cancelar
+          </button>
+        </div>
+        </form>
+    </div>
+  </div>
+
+
+}
+
+<!-----------------------------Modal Eliminar Partido-------------------------------------------->
+@if(modalEliminar){
+<div [class.fondoNegro]="modalEliminar" class="flex relative justify-center" (click)="cerrarModalEliminar()">
+  <div class="w-[500px] items-center bg-white rounded-2xl border-gray-200 border-1 overflow-hidden z-50 h-fit my-auto flex flex-col modal p-4 " (click)="$event.stopPropagation()">
+    <p>Estás seguro de borrar el equipo n°{{modalId}}</p>
+    <div class="flex gap-3 mt-3">
+      <button class=" bg-indigo-600 text-white rounded-xl p-2 valido " (click)="deletePartidos(modalId)">Aceptar</button>
+      <button class=" bg-indigo-600 text-white rounded-xl p-2 valido " (click)="cerrarModalEliminar()">Cancelar</button>
+    </div>
+
+  </div>
+</div>
+}
+<!-----------------------------Barra de busqueda-------------------------------------------->
+
+
+
+<!-----------------------------TABLA Partidos-------------------------------------------->
+<div class="lg:ml-15 lg:mr-25 mt-10 overflow-hidden rounded-lg border border-gray-300 shadow-lg m-1">
+<table class="w-full border-collapse fondo-header">
+  <thead class=" h-12">
+    <tr>
+      <th class="font-semibold lg:px-6 py-3 p-3">Id</th>
+      <th class="font-semibold lg:px-6 py-3 text-left">fecha</th>
+      <th class="hidden lg:flex font-semibold px-6 py-3 text-left">hora</th>
+      <th class="font-semibold lg:px-6 py-3 text-left">Local</th>
+      <th class="font-semibold lg:px-6 py-3 text-left">Visitante</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    @for (partido of partidosList; track $index) {
+      <tr class=" bg-white border-gray-200 hover:bg-gray-200">
+        <th class="lg:px-6  text-gray-700 font-semibold p-3" scope="row">{{ partido.id }}</th>
+        <td class="lg:px-6  text-gray-500 m-1">{{ partido.fecha }}</td>
+        <td class="hidden lg:table-cell  px-6  text-gray-500">{{ partido.hora }}</td>
+        <td class="lg:px-6  text-gray-500 m-1">{{buscarNombreEquipo(partido.equipoLocalId)}}</td>
+        <td class="lg:px-6 py-5 text-gray-500 m-1 ">{{buscarNombreEquipo(partido.equipoVisitanteId)}}</td>
+
+        <td><button class="text-indigo-600 font-semibold cursor-pointer text-sm m-1" type="button" (click)="abrirModalResultado(partido.id)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </button></td>
+        <td><button class="text-indigo-600 font-semibold cursor-pointer text-sm m-1" type="button" (click)="aparecerMenu(partido.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+        </svg>
+        </button></td>
+        <td><button class="text-red-600 font-semibold cursor-pointer text-sm lg:text-base m-1" type="button" (click)="openModalEliminar(partido.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+        </svg></button></td>
+      </tr>
+    } @empty {
+      @for (partido of partidoListData; track $index) {
+        <tr class=" bg-white border-gray-200 hover:bg-gray-200">
+          <th class="lg:px-6  text-gray-700 font-semibold p-3" scope="row">{{ partido.id }}</th>
+          <td class="lg:px-6  text-gray-500 m-1">{{ partido.fecha }}</td>
+          <td class="hidden lg:table-cell  px-6  text-gray-500">{{ partido.hora }}</td>
+          <td class="lg:px-6  text-gray-500 m-1">Ecuador</td>
+          <td class="lg:px-6 py-5 text-gray-500 m-1 ">Colombia</td>
+
+          <td><button class="text-indigo-600 font-semibold cursor-pointer text-sm m-1" type="button" (click)="abrirModalResultado(partido.id)">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </button></td>
+          <td><button class="text-indigo-600 font-semibold cursor-pointer text-sm m-1" type="button" (click)="aparecerMenu(partido.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+          </svg>
+          </button></td>
+          <td><button class="text-red-600 font-semibold cursor-pointer text-sm lg:text-base m-1" type="button" (click)="openModalEliminar(partido.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+          </svg></button></td>
+        </tr>}
+      <tr>
+        <td colspan="4" class="text-center py-1.5 text-gray-500">Estas en modo vista estatico, los botones no funcionan.</td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>
+<!-----------------------------Resultados-------------------------------------------->
+@if(modalResultado){
+  <div [class.fondoNegro]="modalResultado" class="flex relative justify-center" (click)="cerrarModalResultado()">
+    <div class="w-[500px] items-center bg-white rounded-2xl border-gray-200 border-1 overflow-hidden z-50 h-fit my-auto flex flex-col modal p-2 m-2" (click)="$event.stopPropagation()">
+      <h2 >Resultados del Partido</h2>
+      @if(resultado.estadoResultado){
+      <form [formGroup]="formularioUpdateResultados" (submit)="editResultado(partidoId)" class="flex flex-col  items-center">
+        <h2 class="text-2xl">Completado</h2>
+        <p class="font-bold text-indigo-600">Editando Resultado</p>
+        <!------------------GOLES LOCAL--------------------------------------------->
+        <div class="flex flex-col lg:flex-row lg:flex-wrap lg:gap-4 w-[200px] lg:w-[350px]"></div>
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold lg:pt-5" for="golesLocal">Goles Local</label>
+            <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="number" id="golesLocal" formControlName="golesLocal" placeholder="golesLocal">
+          </div>
+          <!-----------------EQUIPO LOCAL--------------------------------------------->
+
+          <div class="flex flex-col lg:w-sm w-[200px] ">
+            <label class="font-medium lg:pt-5" for="equipoLocalId">Equipo Local</label>
+            <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoLocalId" formControlName="equipoLocalId">
+              @for (equipo of equiposList; track $index) {
+                <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+              }
+            </select>
+          </div>
+          <!-----------------GOLES VISITANTE--------------------------------------------->
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold lg:pt-5" for="golesVisitante">Goles Visitante</label>
+            <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="number" id="golesVisitante" formControlName="golesVisitante" placeholder="golesVisitante">
+          </div>
+
+
+          <!-----------------EQUIPO VISITANTE--------------------------------------------->
+
+          <div class="flex flex-col lg:w-sm w-[200px] ">
+            <label class="font-medium lg:pt-5 " for="equipoVisitanteId">Equipo visitante</label>
+            <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoVisitanteId" formControlName="equipoVisitanteId">
+              @for (equipo of equiposList; track $index) {
+                <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+              }
+            </select>
+          </div>
+
+
+
+        <!-----------------------BOTON SUBMIT--------------------------------->
+        <div class="flex gap-3">
+          <button [class.valido]="formularioUpdateResultados.valid" class="w-30 lg:w-52 my-5 bg-indigo-400 text-white rounded-xl  p-2 px-10" type="submit" [disabled]="!formularioUpdateResultados.valid">Aceptar</button>
+          <button class="w-30 lg:w-52 my-5 bg-gray-400 text-white rounded-xl p-2 px-10 cursor-pointer" type="button" (click)="cerrarModalResultado()">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+    } @else {
+      <form [formGroup]="formularioResultados" (submit)="agregarResultado(partidoId)" class="flex flex-col p-3 items-center">
+        <h2 class="text-2xl">Pendiente</h2>
+        <p class="font-bold text-indigo-600">AGREGANDO Resultado</p>
+        <!------------------GOLES LOCAL--------------------------------------------->
+        <div class="flex flex-col lg:flex-row lg:flex-wrap lg:gap-4 w-[200px] lg:w-[350px]"></div>
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold lg:pt-5" for="golesLocal">Goles Local</label>
+            <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="number" id="golesLocal" formControlName="golesLocal" placeholder="golesLocal">
+          </div>
+          <!-----------------EQUIPO LOCAL--------------------------------------------->
+
+          <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+            <label class="font-medium pt-5" for="equipoLocalId">Equipo Local</label>
+            <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoLocalId" formControlName="equipoLocalId">
+              @for (equipo of equiposList; track $index) {
+                <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+              }
+            </select>
+          </div>
+          <!-----------------GOLES VISITANTE--------------------------------------------->
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold lg:pt-5" for="golesVisitante">Goles Visitante</label>
+            <input class=" border-1 border-gray-200 bg-white rounded-lg p-1" type="number" id="golesVisitante" formControlName="golesVisitante" placeholder="golesVisitante">
+          </div>
+
+
+          <!-----------------EQUIPO VISITANTE--------------------------------------------->
+
+          <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+            <label class="font-medium pt-5 " for="equipoVisitanteId">Equipo visitante</label>
+            <select class="border-1 border-gray-200 bg-white rounded-lg p-1" id="equipoVisitanteId" formControlName="equipoVisitanteId">
+              @for (equipo of equiposList; track $index) {
+                <option [value]="equipo.id">{{ equipo.nombreEquipo }}</option>
+              }
+            </select>
+          </div>
+
+
+
+        <!-----------------------BOTON SUBMIT--------------------------------->
+        <div class="flex gap-3">
+          <button [class.valido]="formularioResultados.valid" class=" w-52 my-5 bg-indigo-400 text-white rounded-xl  p-2 px-10" type="submit" [disabled]="!formularioResultados.valid">Agregar Resultado</button>
+          <button class="w-52 my-5 bg-gray-400 text-white rounded-xl p-2 px-10 cursor-pointer" type="button" (click)="cerrarModalResultado()">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+    }
+
+
+    </div>
+  </div>
+}

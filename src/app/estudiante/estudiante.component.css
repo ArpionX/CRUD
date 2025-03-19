@@ -1,0 +1,65 @@
+.aparecer{
+  animation-name: aparecer;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  display: flex;
+  position: absolute;
+}
+.desaparecer{
+  animation-name: desaparecer;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+.altura{
+  height: 920px;
+}
+.ancho{
+  width: 900px ;
+}
+.sombra{
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+.fondo{
+  background-color: #F3F4F6;
+}
+.position{
+  position: sticky;
+  top: 20px;
+}
+.active{
+  background-color: #D2000C;
+  color: white;
+  border-radius: 0.5rem;
+}
+.nav-links:hover{
+  background-color: #ff676e;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+.fondoNegro{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow: hidden;
+}
+@keyframes aparecer {
+  0% {
+  opacity: 0;
+   }
+  100% {
+
+  opacity: 1;}
+}
+@keyframes desaparecer {
+  0% {
+    width: 60%;
+  }
+  100% {
+    width: 0 ;
+  }
+}

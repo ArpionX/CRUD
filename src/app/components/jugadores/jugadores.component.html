@@ -1,0 +1,175 @@
+<div class="flex justify-between items-center p-1">
+  <div class="flex flex-col items-center">
+    <img src="{{equipoFoto}}" alt="foto del equipo" class="h-[100px] w-[100px]  lg:ml-15 ">
+    <h1 class="font-semibold lg:ml-15 ">Jugadores de {{equipoNombre}}</h1>
+    <p class="lg:ml-15 font-light py-2">A list of all the players in their temas. Their Nombre, número de camiseta, posición, equipo, valoracion, and foto.</p>
+  </div>
+  <button type="button" class="lg:mr-30 mt-12 bg-indigo-600 text-white rounded-xl p-2 valido" (click)="toggleMenu()">Add Jugador</button>
+</div>
+
+<!----------------------------MENU FORMULARIO------------------------------------------------>
+<div [class.aparecer]="isMenuOpen" [class.desaparecer]="!isMenuOpen && hasMenuOpened" class="lg:w-[826px] lg:ml-15 items-center bg-white rounded-2xl border-gray-200 border-1 hidden overflow-hidden">
+  <!----------------------------FORMULARIO------------------------------------------------>
+  <p class="font-bold p-3">Agregando Jugadores</p>
+  <form [formGroup]="formularioJugadores" (submit)="agregarJugador()" class="flex flex-col lg:p-3 gap-1 p-2" enctype="multipart/form-data">
+    <!------------------NOMBRE, NUMERO DE CAMISETA Y POSICION--------------------------------------------->
+    <div class="flex flex-wrap gap-1">
+      <div class="grow flex flex-col lg:w-sm">
+        <label class="font-semibold " for="nombre">Nombre</label>
+        <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="text" id="nombre" formControlName="nombre" placeholder="Nombre de jugador">
+      </div>
+      <div class="grow flex flex-col lg:w-sm">
+        <label class="font-semibold " for="numeroCamisa">Número de Camiseta</label>
+        <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="number" id="numeroCamisa" formControlName="numeroCamisa" placeholder="Número de camiseta">
+      </div>
+      <div class="grow flex flex-col lg:w-sm">
+        <label class="font-semibold " for="posicion">Posición</label>
+        <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="text" id="posicion" formControlName="posicion" placeholder="Posición del jugador">
+      </div>
+    </div>
+
+    <!------------------EQUIPO Y FOTO------------------------------------------------>
+    <div class="flex flex-wrap lg:gap-4">
+      <div class="grow flex flex-col lg:w-sm">
+        <label class="font-semibold " for="equipoId">Equipo</label>
+        <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="number" id="equipoId" formControlName="equipoId" placeholder="{{equipoId}}">
+      </div>
+      <div class="flex flex-col lg:w-sm lg:mt-2">
+        <label class="font-medium  " for="foto">Foto</label>
+        <input class="border-1 border-gray-200 rounded-md file:bg-gray-300 file:rounded-md file:p-1" type="file" id="foto" formControlName="foto" accept="image/*" (change)="seleccionarImagen($event)">
+      </div>
+    </div>
+
+    <!-----------------------BOTON SUBMIT--------------------------------->
+    <div class="flex gap-3">
+      <button [class.valido]="formularioJugadores.valid" class="lg:w-52 lg:my-5 bg-indigo-400 text-white rounded-xl p-2 lg:px-10" type="submit" [disabled]="!formularioJugadores.valid">Aceptar</button>
+      <button class="lg:w-52 lg:my-5 bg-gray-400 text-white rounded-xl p-2 lg:px-10 cursor-pointer" type="button" (click)="toggleMenu()">Cancelar</button>
+    </div>
+
+  </form>
+</div>
+
+@if(menuFlotante) {
+  <div [class.fondoNegro]="menuFlotante" class="flex relative justify-center" (click)="cerrarMenu()">
+    <div class="lg:w-[826px] lg:ml-15 items-center bg-white rounded-2xl border-gray-200 border-1 overflow-hidden z-50 h-fit my-auto flex flex-col modal p-1" (click)="$event.stopPropagation()">
+      <p class="font-bold">Editando Jugadores</p>
+      <form [formGroup]="formularioUpdateJugadores" (submit)="editar(idJugadorSeleccionado!)" class="flex flex-col md:p-2 lg:p-3 sm:w-sm w-[300px] lg:w-auto">
+        <!------------------NOMBRE, NUMERO DE CAMISETA Y POSICION--------------------------------------------->
+        <div class="flex flex-wrap gap-4">
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold " for="nombre">Nombre</label>
+            <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="text" id="nombre" formControlName="nombre" placeholder="Nombre de jugador">
+          </div>
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold " for="numeroCamisa">Número de Camiseta</label>
+            <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="number" id="numeroCamisa" formControlName="numeroCamisa" placeholder="Número de camiseta">
+          </div>
+          <div class="grow flex flex-col lg:w-sm">
+            <label class="font-semibold " for="posicion">Posición</label>
+            <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="text" id="posicion" formControlName="posicion" placeholder="Posición del jugador" >
+          </div>
+          <div class="grow flex flex-col lg:w-sm ">
+            <label class="font-semibold " for="equipoId">Id de Equipo</label>
+            <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="text" id="equipoId" formControlName="equipoId" placeholder="{{equipoId}}">
+          </div>
+        </div>
+
+        <!------------------EQUIPO Y FOTO------------------------------------------------>
+        <div class="flex flex-wrap lg:gap-2 sm:w-sm mt-2">
+
+          <div class="flex flex-col lg:w-sm w-[300px]">
+            <label class="font-medium  " for="foto">Foto</label>
+            <input class="border-1 border-gray-200 bg-white rounded-md  file:bg-gray-300 file:rounded-md file:p-1" type="file" id="foto" formControlName="foto" accept="image/*" (change)="seleccionarImagen($event)">
+          </div>
+        </div>
+
+        <!------------------ID------------------------------------------------>
+        <div class="flex flex-col lg:w-sm w-[200px] mt-2">
+          <label class="font-medium" for="id">Id de Jugador</label>
+          <input class="border-1 border-gray-200 bg-white rounded-md p-1" type="number" id="id" formControlName="id" placeholder=" de Jugador">
+        </div>
+
+
+        <!-----------------------BOTON SUBMIT--------------------------------->
+        <div class="flex gap-3">
+          <button [class.valido]="formularioUpdateJugadores.valid" class="md:w-30 lg:w-52 my-5 bg-indigo-400 text-white rounded-xl p-2 lg:px-10" type="submit" [disabled]="!formularioUpdateJugadores.valid">Aceptar</button>
+          <button class="md:w-30 lg:w-52 my-5 bg-gray-400 text-white rounded-xl p-2 lg:px-10 cursor-pointer" type="button" (click)="cerrarMenu()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if(modalEliminar) {
+  <div [class.fondoNegro]="modalEliminar" class="flex relative justify-center" (click)="cerrarModalEliminar()">
+    <div class="w-[500px] items-center bg-white rounded-2xl border-gray-200 border-1 overflow-hidden z-50 h-fit my-auto flex flex-col modal p-4" (click)="$event.stopPropagation()">
+      <p>Estás seguro de borrar el jugador n°{{modalId}}</p>
+      <div class="flex gap-3 mt-3">
+        <button class="bg-indigo-600 text-white rounded-xl p-2 valido" (click)="deleteJugador(modalId)">Aceptar</button>
+        <button class="bg-indigo-600 text-white rounded-xl p-2 valido" (click)="cerrarModalEliminar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-----------------------------TABLA JUGADORES-------------------------------------------->
+<div class="lg:ml-15 lg:mr-25 mt-10 overflow-hidden rounded-lg border border-gray-300 shadow-lg">
+  <table class="w-full border-collapse fondo-header">
+    <thead class="h-12">
+      <tr>
+        <th class="font-semibold lg:px-6 py-3">Id</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Nombre</th>
+        <th class="hidden lg:table-cell font-semibold lg:px-6 py-3 text-left">Número</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Posición</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Foto</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(jugador of jugadoresFiltrados; track $index) {
+      <tr class=" bg-white border-gray-200 hover:bg-gray-200 h-5">
+        <th class="lg:px-6 py-1.5 text-gray-700 font-semibold" scope="row">{{ jugador.id }}</th>
+        <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.nombre }}</td>
+        <td class="hidden lg:table-cell lg:px-6 py-1.5 text-gray-500">{{ jugador.numeroCamisa }}</td>
+        <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.posicion }}</td>
+        <td class="lg:px-6 py-1.5">
+          <img src="{{jugador.fotoJugador}}" class="h-[50px] w-[60px]"  alt="{{jugador.nombre}}">
+        </td>
+        <td><button class="text-indigo-600 font-semibold py-2 cursor-pointer" (click)="aparecerMenu(jugador.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+        </svg>
+        </button></td>
+        <td><button class="text-red-600 font-semibold py-2 cursor-pointer" (click)="openModalEliminar(jugador.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+        </svg>
+        </button></td>
+      </tr>
+    }
+      @empty {
+        @for(jugador of jugadoresListData; track $index) {
+          <tr class=" bg-white border-gray-200 hover:bg-gray-200 h-5">
+            <th class="lg:px-6 py-1.5 text-gray-700 font-semibold" scope="row">{{ jugador.id }}</th>
+            <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.nombre }}</td>
+            <td class="hidden lg:table-cell lg:px-6 py-1.5 text-gray-500">{{ jugador.numeroCamisa }}</td>
+            <td class="lg:px-6 py-1.5 text-gray-500">{{ jugador.posicion }}</td>
+            <td class="lg:px-6 py-1.5">
+              <img src="{{jugador.fotoJugador}}" class="h-[50px] w-[60px]"  alt="{{jugador.nombre}}">
+            </td>
+            <td><button class="text-indigo-600 font-semibold py-2 cursor-pointer" (click)="aparecerMenu(jugador.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+            </svg>
+            </button></td>
+            <td><button class="text-red-600 font-semibold py-2 cursor-pointer" (click)="openModalEliminar(jugador.id)"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+            </svg>
+            </button></td>
+          </tr>
+        }
+        <tr>
+          <td colspan="4" class="text-center py-1.5 text-gray-500">Para mayor funcionamiento contact me</td>
+        </tr>
+      }
+
+    </tbody>
+  </table>
+</div>
+

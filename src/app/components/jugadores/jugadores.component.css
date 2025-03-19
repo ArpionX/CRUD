@@ -1,0 +1,61 @@
+.fondo-header{
+  background-color: #faf2e9;
+}
+.valido{
+  background-color: #672dc5;
+  color: white;
+  cursor: pointer;
+}
+.aparecer{
+  animation-name: aparecer;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  display: block;
+}
+.desaparecer{
+  animation-name: desaparecer;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  display: block;
+}
+.fondoNegro{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  overflow: hidden;
+}
+.modal{
+  z-index: 50;
+}
+@keyframes aparecer {
+  0% {
+  opacity: 1;
+  height: 0;
+  display: none;}
+
+  100% {
+    opacity: 1;
+  height: 375px;
+  }
+}
+@keyframes desaparecer {
+  0% {
+    opacity: 1;
+    height: 350px}
+  100% {
+    opacity: 1;
+    height: 0;
+    display: none;}
+
+}
+/* Oculta los botones de incremento y decremento */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+

@@ -1,0 +1,44 @@
+<div class="flex justify-between items-center p-1">
+  <div class="flex flex-col">
+    <h1 class="font-semibold lg:ml-15 mt-10">Partidos</h1>
+    <p class=" lg:ml-15 font-light py-2">A list of all the Partidos in your account including their fecha, hora, equipo local and equipo visitante y resultado.</p>
+  </div>
+</div>
+<div class="lg:ml-15 lg:mr-25 mt-10 overflow-hidden rounded-lg border border-gray-300 shadow-lg m-1">
+  <table class="w-full border-collapse fondo-header">
+    <thead class=" h-12">
+      <tr>
+        <th class="font-semibold lg:px-6 py-3 p-3">Id</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">fecha</th>
+        <th class="hidden lg:flex font-semibold px-6 py-3 text-left">hora</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Local</th>
+        <th class="font-semibold lg:px-6 py-3 text-left">Visitante</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      @for (partido of partidosList; track $index) {
+        <tr class=" bg-white border-gray-200 hover:bg-gray-200">
+          <th class="lg:px-6  text-gray-700 font-semibold p-3" scope="row">{{ partido.id }}</th>
+          <td class="lg:px-6  text-gray-500 m-1">{{ partido.fecha }}</td>
+          <td class="hidden lg:table-cell  px-6  text-gray-500">{{ partido.hora }}</td>
+          <td class="lg:px-6  text-gray-500 m-1">{{buscarNombreEquipo(partido.equipoLocalId)}}</td>
+          <td class="lg:px-6 py-5 text-gray-500 m-1 ">{{buscarNombreEquipo(partido.equipoVisitanteId)}}</td>
+        </tr>
+      } @empty {
+        @for (partido of partidoListData; track $index) {
+          <tr class=" bg-white border-gray-200 hover:bg-gray-200">
+            <th class="lg:px-6  text-gray-700 font-semibold p-3" scope="row">{{ partido.id }}</th>
+            <td class="lg:px-6  text-gray-500 m-1">{{ partido.fecha }}</td>
+            <td class="hidden lg:table-cell  px-6  text-gray-500">{{ partido.hora }}</td>
+            <td class="lg:px-6  text-gray-500 m-1">Ecuador</td>
+            <td class="lg:px-6 py-5 text-gray-500 m-1 ">Peru</td>
+          </tr>
+        }
+        <tr>
+          <td colspan="4" class="text-center py-1.5 text-gray-500">Modo Vista Ejemplos</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  </div>
